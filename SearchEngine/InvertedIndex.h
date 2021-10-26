@@ -19,9 +19,9 @@ public:
 	bool contains(string word);
 	bool contains(string word, string location);
 	bool contains(string word, string location, int position);
-	int size(string word, string location);
-	int size(string word);
-	int size();
+	size_t size(string word, string location);
+	size_t size(string word);
+	size_t size();
 
 	/**
 	 * Returns an unmodifiable view of the words stored in the index for the
@@ -96,7 +96,7 @@ public:
 		 *
 		 * @return count of result
 		 */
-		int getCount() {
+		size_t getCount() {
 			return this->count;
 		}
 
@@ -130,7 +130,7 @@ public:
 		/**
 		 * Stores count at Path
 		 */
-		int count;
+		size_t count;
 
 		/**
 		 * Stores score of result
@@ -184,7 +184,5 @@ private:
 	 * Stores locations of Paths and word count found in that location in key = value pairs.
 	 */
 	map< string, int> WordCount;
-
-	
 };
 

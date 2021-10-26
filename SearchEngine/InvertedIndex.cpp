@@ -79,17 +79,17 @@ bool InvertedIndex::contains(string word, string location, int position)
 	return false;
 }
 
-int InvertedIndex::size()
+size_t InvertedIndex::size()
 {
 	return Map.size();
 }
 
-int InvertedIndex::size(string word)
+size_t InvertedIndex::size(string word)
 {
 	return Map[word].size();
 }
 
-int InvertedIndex::size(string word, string location)
+size_t InvertedIndex::size(string word, string location)
 {
 	return Map[word][location].size();
 }
@@ -109,8 +109,7 @@ vector<InvertedIndex::Result> * InvertedIndex::exactSearch(set<string> queries)
 	vector<InvertedIndex::Result> * results = new vector<InvertedIndex::Result>;
 	static map<string, InvertedIndex::Result> * lookup = new map<string, InvertedIndex::Result>;
 	for (string query : queries) {
-		cout << query << endl;
-		if (Map.contains(query)) {
+		if (Map.count(query)) {
 			foundWord(results, lookup, queries, query);
 		}
 	}
@@ -120,22 +119,34 @@ vector<InvertedIndex::Result> * InvertedIndex::exactSearch(set<string> queries)
 vector<InvertedIndex::Result> * InvertedIndex::partialSearch(set<string> queries)
 {
 	vector<InvertedIndex::Result> * results = new vector<InvertedIndex::Result>;
-	map<string, InvertedIndex::Result> lookup;
+	map<string, InvertedIndex::Result> * lookup = new map<string, InvertedIndex::Result>;
 	for (string query : queries) {
-		// TODO
+		for (auto it = Map.begin(); it != Map.end(); it++) {
+			if (it->first.rfind(query, 0) == 0) {
+				cout << "found word" << endl;
+				foundWord(results, lookup, queries, it->first);
+			}
+			else {
+				break;
+			}
+		}
 	}
 	return results;
 }
 
 void InvertedIndex::merge(InvertedIndex* local)
 {
-	//TODO
+	for (string word : local->getWords()) {
+		if (!Map.count(word)) {
+			//Map[word] = local;
+		}
+	}
 }
 
 void InvertedIndex::foundWord(vector<InvertedIndex::Result> * results, map<string, InvertedIndex::Result> * lookup, set<string> queries, string word)
 {
 	for (string path : InvertedIndex::getLocationsOfWord(word)) {
-		if (!lookup->contains(path)) {
+		if (!lookup->count(path)) {
 			InvertedIndex::Result * res = new InvertedIndex::Result(path, this);
 			lookup->insert(pair<string, InvertedIndex::Result>(path, *res));
 			results->push_back(*res);

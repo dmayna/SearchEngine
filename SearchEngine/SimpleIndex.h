@@ -38,7 +38,7 @@ public:
 	 * @return 0 if the word or location is not in the index or has no words, otherwise
 	 *         the number of words stored for that element
 	 */
-	int size(string word, string location);
+	size_t size(string word, string location);
 	
 	/**
 	 * Returns the number of words stored for the given path.
@@ -47,7 +47,7 @@ public:
 	 * @return 0 if the location is not in the index or has no words, otherwise
 	 *         the number of words stored for that element
 	 */
-	int size(string word);
+	size_t size(string word);
 
 	/**
 	 * Returns the number of locations stored in the index.
@@ -55,7 +55,7 @@ public:
 	 * @return 0 if the index is empty, otherwise the number of locations in the
 	 *         index
 	 */
-	int size();
+	size_t size();
 
 	/**
 	 * Determines whether the location is stored in the index.
