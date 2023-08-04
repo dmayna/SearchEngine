@@ -5,7 +5,7 @@
 #include <sstream>
 
 using namespace std;
-namespace fs = std::filesystem;
+namespace fs = std::__fs::filesystem;
 
 void IndexBuilder::buildIndex(string dir, InvertedIndex *index) {
 	if (fs::is_regular_file(dir)) {

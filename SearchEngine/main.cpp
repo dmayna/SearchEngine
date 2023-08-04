@@ -13,22 +13,22 @@ int main(int argc, char** argv)
 	// TODO add argument parsing, partial search not working
 	// testing 
 	vector<string> args;
-	for (size_t i = 1; i < argc; i++)
+	for (int i = 1; i < argc; i++)
 	{
 		args.push_back(argv[i]);
 	}
-	ArgumentMap * ArgMap = new ArgumentMap(args);
+	//ArgumentMap * ArgMap = new ArgumentMap(args);
 
 
 	InvertedIndex * index = new InvertedIndex;
-	string dir = "C:/Users/Dmayna/Desktop/test/";
+	// update dir string to path of folder with text to build index
+	string dir = "/Users/dylan/projects/c++/test";
 	IndexBuilder * builder = new IndexBuilder;
 	builder->buildIndex(dir, index);
-	set<string> queries = { "a", "i" };
-	vector<InvertedIndex::Result> * results = index->search(queries, true);
+	set<string> queries = {"the"};
+	vector<InvertedIndex::Result *> * results = index->search(queries, true);
 	for (auto result : *results) {
-		cout << "Location: " << result.getWhere() << " | Score: " << result.getScore() * 100 << endl;
-		printf("%1.2f\n", result.getScore());
+		cout << "Location: " << result->getWhere() << " | Score: " << result->getScore() * 100 << "% | Count = " << result->getCount() << "\n";
 	}
 }
 

@@ -76,10 +76,11 @@ public:
 	public:
 		Result(string location, InvertedIndex * index)
 		{
-			this->where = location;
-			this->count = 0;
-			this->score = 0;
-			this->index = index;
+			where_ = location;
+			count_ = 0;
+			score_ = 0;
+			index_ = index;
+			//TODO add query
 		}
 
 		/**
@@ -88,7 +89,7 @@ public:
 		 * @return score of result
 		 */
 		double getScore() {
-			return this->score;
+			return score_;
 		}
 
 		/**
@@ -97,7 +98,7 @@ public:
 		 * @return count of result
 		 */
 		size_t getCount() {
-			return this->count;
+			return count_;
 		}
 
 		/**
@@ -106,7 +107,7 @@ public:
 		 * @return location of result
 		 */
 		string getWhere() {
-			return this->where;
+			return where_;
 		}
 
 		/**
@@ -114,33 +115,33 @@ public:
 		 * @param key new updated key to use to update result
 		 */
 		void update(string key) {
-			this->count += index->size(key, this->where);
-			//cout << "update count: " << this->count << endl;
-			this->score = (((double)count / (double)index->getWordCount(this->where)));
-			//cout << "update word count: " << (double)index->getWordCount(this->where) << endl;
-			//cout << "update score: " << this->score << endl;
+			count_ += index_->size(key, where_);
+			//cout << "update count: " << count_ << endl;
+			score_ = (((double)count_ / (double)index_->getWordCount(where_)));
+			//cout << "update word count: " << (double)index_->getWordCount(where_) << endl;
+			//cout << "update score: " << score_ << endl;
 		}
 
 	private:
 		/**
 		 * Stores location of Path
 		 */
-		string where;
+		string where_;
 
 		/**
 		 * Stores count at Path
 		 */
-		size_t count;
+		size_t count_;
 
 		/**
 		 * Stores score of result
 		 */
-		double score;
+		double score_;
 
 		/**
 		 * Stores pointer to index
 		 */
-		InvertedIndex * index;
+		InvertedIndex * index_;
 	};
 
 	/**
@@ -149,21 +150,21 @@ public:
 	 * @param exact the tpye of search to perform
 	 * @return a List of search results
 	 */
-	vector<InvertedIndex::Result> * search(set<string> queries, bool exact);
+	vector<InvertedIndex::Result *> * search(set<string> queries, bool exact);
 
 	/**
 	 * performs partial search on inverted index with query
 	 * @param queries to search for
 	 * @return a List of search results
 	 */
-	vector<InvertedIndex::Result> * partialSearch(set<string> queries);
+	vector<InvertedIndex::Result *> * partialSearch(set<string> queries);
 
 	/**
 	 * performs exact search on inverted index with query
 	 * @param queries to search for
 	 * @return a List of search results
 	 */
-	vector<InvertedIndex::Result> * exactSearch(set<string> queries);
+	vector<InvertedIndex::Result *> * exactSearch(set<string> queries);
 
 	/**
 	 * found word in search and adds result to list
@@ -172,7 +173,7 @@ public:
 	 * @param queries to search for
 	 * @param word the word searched for
 	 */
-	void foundWord(vector<Result> * results, map<string, Result> * lookup, set<string> queries, string word);
+	void foundWord(vector<Result *> * results, map<string, Result *> * lookup, string word);
 
 private:
 	/**

@@ -11,7 +11,7 @@ ArgumentMap::ArgumentMap(vector<string> args)
 
 void ArgumentMap::parse(vector<string> args)
 {
-	for (int i = 0; i < args.size(); i++) {
+	for (size_t i = 0; i < args.size(); i++) {
 		if (isFlag(args[i])) {
 			if (i < args.size() - 1 && isValue(args[i + 1])) {
 				ArgMap[args[i]] = args[i];

@@ -94,7 +94,7 @@ size_t InvertedIndex::size(string word, string location)
 	return Map[word][location].size();
 }
 
-vector<InvertedIndex::Result> * InvertedIndex::search(set<string> queries, bool exact)
+vector<InvertedIndex::Result *> * InvertedIndex::search(set<string> queries, bool exact)
 {
 	if (exact) {
 		return exactSearch(queries);
@@ -104,27 +104,27 @@ vector<InvertedIndex::Result> * InvertedIndex::search(set<string> queries, bool 
 	}
 }
 
-vector<InvertedIndex::Result> * InvertedIndex::exactSearch(set<string> queries)
+vector<InvertedIndex::Result *> * InvertedIndex::exactSearch(set<string> queries)
 {
-	vector<InvertedIndex::Result> * results = new vector<InvertedIndex::Result>;
-	static map<string, InvertedIndex::Result> * lookup = new map<string, InvertedIndex::Result>;
+	vector<InvertedIndex::Result *> * results = new vector<InvertedIndex::Result *>;
+	static map<string, InvertedIndex::Result *> * lookup = new map<string, InvertedIndex::Result *>;
 	for (string query : queries) {
 		if (Map.count(query)) {
-			foundWord(results, lookup, queries, query);
+			foundWord(results, lookup, query);
 		}
 	}
 	return results;
 }
 
-vector<InvertedIndex::Result> * InvertedIndex::partialSearch(set<string> queries)
+vector<InvertedIndex::Result *> * InvertedIndex::partialSearch(set<string> queries)
 {
-	vector<InvertedIndex::Result> * results = new vector<InvertedIndex::Result>;
-	map<string, InvertedIndex::Result> * lookup = new map<string, InvertedIndex::Result>;
+	vector<InvertedIndex::Result *> * results = new vector<InvertedIndex::Result *>;
+	map<string, InvertedIndex::Result *> * lookup = new map<string, InvertedIndex::Result *>;
 	for (string query : queries) {
 		for (auto it = Map.begin(); it != Map.end(); it++) {
 			if (it->first.rfind(query, 0) == 0) {
 				cout << "found word" << endl;
-				foundWord(results, lookup, queries, it->first);
+				foundWord(results, lookup, it->first);
 			}
 			else {
 				break;
@@ -143,14 +143,15 @@ void InvertedIndex::merge(InvertedIndex* local)
 	}
 }
 
-void InvertedIndex::foundWord(vector<InvertedIndex::Result> * results, map<string, InvertedIndex::Result> * lookup, set<string> queries, string word)
+void InvertedIndex::foundWord(vector<InvertedIndex::Result *> * results, map<string, InvertedIndex::Result*> * lookup, string word)
 {
 	for (string path : InvertedIndex::getLocationsOfWord(word)) {
 		if (!lookup->count(path)) {
 			InvertedIndex::Result * res = new InvertedIndex::Result(path, this);
-			lookup->insert(pair<string, InvertedIndex::Result>(path, *res));
-			results->push_back(*res);
+			//result error might be smoewhere here for score
+			lookup->insert(pair<string, InvertedIndex::Result *>(path, res));
+			results->push_back(res);
 		}
-		lookup->at(path).update(word);
+		lookup->at(path)->update(word);
 	}
 }
