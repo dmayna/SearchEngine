@@ -9,8 +9,7 @@
 
 using namespace std;
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
 	// TODO add argument parsing, partial search not working
 	// testing 
 	//vector<string> args;
@@ -34,6 +33,6 @@ int main(int argc, char** argv)
 		cout << "Score: " << result->getScore() * 100 << "%\n";
 		cout << "Count = " << result->getCount() << "\n\n";
 	}
+	
+	return 0;
 }
-
-
