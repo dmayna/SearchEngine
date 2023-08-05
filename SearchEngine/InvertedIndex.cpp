@@ -147,8 +147,7 @@ void InvertedIndex::foundWord(vector<InvertedIndex::Result *> * results, map<str
 {
 	for (string path : InvertedIndex::getLocationsOfWord(word)) {
 		if (!lookup->count(path)) {
-			InvertedIndex::Result * res = new InvertedIndex::Result(path, this);
-			//result error might be smoewhere here for score
+			InvertedIndex::Result * res = new InvertedIndex::Result(path, this, word);
 			lookup->insert(pair<string, InvertedIndex::Result *>(path, res));
 			results->push_back(res);
 		}

@@ -6,17 +6,17 @@
 #include "ArgumentMap.h"
 #include "InvertedIndex.h"
 #include "IndexBuilder.h"
+
 using namespace std;
 
 int main(int argc, char** argv)
 {
 	// TODO add argument parsing, partial search not working
 	// testing 
-	vector<string> args;
-	for (int i = 1; i < argc; i++)
-	{
-		args.push_back(argv[i]);
-	}
+	//vector<string> args;
+	//for (int i = 1; i < argc; i++) {
+		//args.push_back(argv[i]);
+	//}
 	//ArgumentMap * ArgMap = new ArgumentMap(args);
 
 
@@ -25,10 +25,14 @@ int main(int argc, char** argv)
 	string dir = "/Users/dylan/projects/c++/test";
 	IndexBuilder * builder = new IndexBuilder;
 	builder->buildIndex(dir, index);
-	set<string> queries = {"the"};
+	set<string> queries = {"the", "he"};
 	vector<InvertedIndex::Result *> * results = index->search(queries, true);
 	for (auto result : *results) {
-		cout << "Location: " << result->getWhere() << " | Score: " << result->getScore() * 100 << "% | Count = " << result->getCount() << "\n";
+		cout << "Query: " << result->getQuery() << "\n";
+		cout << "Location: " << result->getWhere() << "\n";
+		cout << "Word Count: " << index->getWordCount(result->getWhere()) << "\n";
+		cout << "Score: " << result->getScore() * 100 << "%\n";
+		cout << "Count = " << result->getCount() << "\n\n";
 	}
 }
 

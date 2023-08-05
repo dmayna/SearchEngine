@@ -74,13 +74,13 @@ public:
 	class Result
 	{
 	public:
-		Result(string location, InvertedIndex * index)
+		Result(string location, InvertedIndex * index, string query)
 		{
 			where_ = location;
 			count_ = 0;
 			score_ = 0;
 			index_ = index;
-			//TODO add query
+			query_ = query;//TODO add query
 		}
 
 		/**
@@ -109,6 +109,16 @@ public:
 		string getWhere() {
 			return where_;
 		}
+
+		/**
+		 * Returns query of result searched
+		 *
+		 * @return query searched
+		 */
+		string getQuery() {
+			return query_;
+		}
+
 
 		/**
 		 * Updates a search result with new word count and score
@@ -142,6 +152,11 @@ public:
 		 * Stores pointer to index
 		 */
 		InvertedIndex * index_;
+
+		/**
+		* Stores query searched
+		*/
+		string query_;
 	};
 
 	/**
