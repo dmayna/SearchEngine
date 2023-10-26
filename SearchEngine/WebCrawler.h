@@ -10,6 +10,7 @@ class WebCrawler {
         WebCrawler();
         WebCrawler(int inDepth);
         void crawl();
+        void addUrl(string url);
 
 
     private:
