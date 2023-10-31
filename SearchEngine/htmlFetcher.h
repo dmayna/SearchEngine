@@ -2,6 +2,10 @@
 
 #include <map>
 #include <vector>
+#include <algorithm>
+#include <string>
+
+#include <curl/curl.h>
 
 using namespace std;
 
@@ -12,12 +16,12 @@ using namespace std;
  * @see HttpsFetcher
  * @author Dmayna
  */
-class htmlFetcher
+class HtmlFetcher
 {
 private:
     
 public:
-    htmlFetcher(/* args */);
+    HtmlFetcher(/* args */);
 
     /**
 	 * Returns {@code true} if and only if there is a "Content-Type" header and
@@ -61,7 +65,7 @@ public:
 	 *
 	 * @see #fetch(URL, int)
 	 */
-    string fetch(string url, int redirects);
+    string fetch(CURL *curl, string url, int redirects);
 
     /**
 	 * Calls {@link #fetch(string, int)} with 0 redirects.
@@ -71,5 +75,5 @@ public:
 	 *         resource is not html
 	 *
 	 */
-    string fetch(string url);
+    string fetch(CURL *curl, string url);
 };

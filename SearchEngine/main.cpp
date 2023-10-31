@@ -6,6 +6,7 @@
 #include "ArgumentMap.h"
 #include "InvertedIndex.h"
 #include "IndexBuilder.h"
+#include "WebCrawler.h"
 
 using namespace std;
 
@@ -26,13 +27,17 @@ int main(int argc, char** argv) {
 	builder->buildIndex(dir, index);
 	set<string> queries = {"the", "he"};
 	vector<InvertedIndex::Result *> * results = index->search(queries, true);
-	for (auto result : *results) {
+	/*for (auto result : *results) {
 		cout << "Query: " << result->getQuery() << "\n";
 		cout << "Location: " << result->getWhere() << "\n";
 		cout << "Word Count: " << index->getWordCount(result->getWhere()) << "\n";
 		cout << "Score: " << result->getScore() * 100 << "%\n";
 		cout << "Count = " << result->getCount() << "\n\n";
-	}
-	
+	}*/
+	WebCrawler wc;
+	//wc.addUrl("https://www.gutenberg.org/cache/epub/1513/pg1513.txt");
+	wc.addUrl("https://example.com/");
+	wc.crawl();
+
 	return 0;
 }

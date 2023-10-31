@@ -2,6 +2,9 @@
 
 #include <iostream>
 #include <queue>
+#include "HttpsFetcher.h"
+#include "HtmlFetcher.h"
+#include "HtmlCleaner.h"
 
 using namespace std;
 
@@ -16,6 +19,9 @@ class WebCrawler {
     private:
         queue<string> * urls;
         int depth;
+        HtmlFetcher * html_fetcher;         
+        HtmlCleaner * html_cleaner;
+        HttpsFetcher * https_fetcher;
 };
 
 /*

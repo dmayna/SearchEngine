@@ -8,12 +8,12 @@ using namespace std;
  *
  * @author Dmayna
  */
-class htmlCleaner
+class HtmlCleaner
 {
 private:
     /* data */
 public:
-    htmlCleaner(/* args */);
+    HtmlCleaner(/* args */);
 
     /**
 	 * Removes all HTML tags and certain block elements from the provided text.
@@ -95,6 +95,13 @@ public:
 	 *
 	 */
 	string stripElement(string html, string name);
+
+    /**
+     * 
+     * 
+     * 
+    */
+   string stripCss(string html);
 
     /**
 	 * Returns true if the provided input has one or more newlines.

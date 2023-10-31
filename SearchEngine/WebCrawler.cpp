@@ -6,7 +6,7 @@
 #include <regex>
 #include <sstream>
 #include <cstdlib>
-#include <curl/curl.h>
+
 
 using namespace std;
 
@@ -33,6 +33,14 @@ void remove_ws(string &s) {
         }
     }
     
+}
+
+static size_t header_callback(char* buffer, size_t size,
+    size_t nitems, void* userdata)
+{
+    std::string *headers = (std::string*) userdata;
+    headers->append(buffer, nitems * size);
+    return nitems * size;
 }
 
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
@@ -62,44 +70,47 @@ void WebCrawler::crawl() {
     } else {
         while (!urls->empty()) {
             CURL *curl;
-            CURLcode res;
             string readBuffer;
+            string headers;
+            string website = urls->front();
+            urls->pop();
+            
+            curl = https_fetcher->openConnection(website);
+            headers = https_fetcher->fetchURL(curl, website);
+            cout << "Headers:\n" << headers << "\n";
+            
 
-            curl = curl_easy_init();
-            if(curl) {
-                string website = urls->front();
-                urls->pop();
-                curl_easy_setopt(curl, CURLOPT_URL, website.c_str());
-                curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-                curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
-                res = curl_easy_perform(curl);
-                //cout << readBuffer << "\n";
+            
+
+            map<string, vector<string>> header_fields = https_fetcher->getHeaderFields(headers);
+            /*for(auto it_map = header_fields.begin(); it_map != header_fields.end(); it_map++) {
+                cout << "\nHeader: " << it_map->first << "\n";
+                for(auto it_vec = it_map->second.begin(); it_vec != it_map->second.end(); it_vec++) {
+                    cout << *it_vec << "\n";
+                }
+            }*/
+            if (html_fetcher->isHtml(header_fields)) {
+                readBuffer = html_fetcher->fetch(curl, website);
+                readBuffer = html_cleaner->stripCss(readBuffer);
+                readBuffer = html_cleaner->stripHtml(readBuffer);
+                readBuffer = html_cleaner->stripBlockElements(readBuffer);
+                readBuffer = html_cleaner->stripEntities(readBuffer);
+                readBuffer = html_cleaner->stripTags(readBuffer);
+                readBuffer = html_cleaner->stripComments(readBuffer);
                 remove_ws(readBuffer);
-                vector<string>words = split(readBuffer,' ');
-
-                regex regexp("<\\s*body[^>]*>([\\s\\S]*)<\\s*/\\s*body\\s*>"); 
-                smatch m;
-                regex_search(readBuffer, m, regexp);
-                cout<<"String that matches the pattern:"<<endl;
-                for (auto x : m) 
-                    cout << x << " "; 
-                //bool found_body = false;
-                //for (string word : words) {
-                     //cout << "[" << word << "]\n";
-                //}
-                /*while (readBuffer.find("<") != std::string::npos) {
-                    auto startpos = words = split(temp,' ');.find("<");
-                    auto endpos = readBuffer.find(">") + 1;
-
-                    if (endpos != std::string::npos)
-                    {
-                        readBuffer.erase(startpos, endpos - startpos);
-                    }
-                }*/
-                //cout << "\n\nreadBuffer = \n" << readBuffer << "\n";
-                /* always cleanup */ 
-                curl_easy_cleanup(curl);
+                cout << "\nSTRIPPED HTML: \n" << readBuffer << "\n"; 
+            } else {
+                cout << "NOT HTML\n";
             }
+
+            cout << "Status code: " << html_fetcher->getStatusCode(header_fields) << "\n";
+
+            if (html_fetcher->isRedirect(header_fields)) {
+                cout << "Is redirect\n";
+            } else {
+                cout << "NOT redirect\n";
+            }
+            curl_easy_cleanup(curl);
         }
     }
 }

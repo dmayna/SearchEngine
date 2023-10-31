@@ -19,6 +19,8 @@ public:
 	 */
 	static void buildIndex(string dir, InvertedIndex *index);
 
+	//void IndexBuilder::buildIndexWeb(string url, string webData, InvertedIndex *index);
+
 	/**
 	 * parses a file and adds every stem word to inverted index
 	 *

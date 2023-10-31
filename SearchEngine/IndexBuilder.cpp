@@ -19,14 +19,42 @@ void IndexBuilder::buildIndex(string dir, InvertedIndex *index) {
 	}
 }
 
+/*void IndexBuilder::buildIndexWeb(string url, string webData, InvertedIndex *index) {
+	int position = 1;
+	istringstream iss(webData);
+	do {
+        string subs;
+ 
+        // Get the word from the istringstream
+        iss >> subs;
+ 
+        // add the word fetched from
+        // the istringstream to index
+		index->add(subs, url, position);
+        position++;
+ 
+    } while (iss);
+}*/
+
 void IndexBuilder::parseFile(string file, InvertedIndex *index) {
-	string line;
+	string word;
 	int position = 1;
 	
 	ifstream readFile(file);
-	while (readFile >> line) {
-		index->add(line, file, position);
-		//cout << "Added: [ " << line << " ] from [ " << file << " ] at " << position << endl;
-		position++;
+	while (readFile >> word) {
+		string word_lower_case = "";
+		for (size_t i = 0; i < word.length(); i++)
+		{
+			if (isalpha(word[i]))
+			{
+				word_lower_case+= tolower(word[i]);
+			}
+		}
+		if (!word_lower_case.empty())
+		{
+			index->add(word_lower_case, file, position);
+			//cout << "Added: [ " << word_lower_case << " ] from [ " << file << " ] at " << position << endl;
+			position++;
+		}
 	}
 }
